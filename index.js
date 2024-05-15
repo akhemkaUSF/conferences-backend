@@ -23,11 +23,11 @@ app.get('/test', (req,res) => {
 });
 
 app.post('/register', async (req,res) => {
-    //mongoose.Promise = global.Promise;
-    //mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }).then(
-    //    () => {console.log('Database is connected') },
-    //    err => { console.log('Can not connect to the database'+ err)}
-    //);
+    mongoose.Promise = global.Promise;
+    mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }).then(
+        () => {console.log('Database is connected') },
+        err => { console.log('Can not connect to the database'+ err)}
+    );
 
     const {name,email,password} = req.body;
     try {
