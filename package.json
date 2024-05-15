@@ -17,6 +17,6 @@
     "cors": "*",
     "dotenv": "*",
     "mongoose": "*",
-    "bcrypt": "*"
+    "bcryptjs": "*"
   }
 }
