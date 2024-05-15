@@ -12,6 +12,9 @@
     "node": "20.x"
   },
   "dependencies": {
-    "git": "^0.1.5"
+    "git": "^0.1.5",
+    "express":"*",
+    "body-parser":"*",
+    "bcrypt": "^0.8.5"
   }
 }
