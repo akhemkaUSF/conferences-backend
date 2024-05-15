@@ -16,7 +16,6 @@ app.use(cors(
     }
 ));
 
-//mongoose.connect(process.env.MONGO_URL);
 
 
 app.get('/test', (req,res) => {
@@ -24,13 +23,23 @@ app.get('/test', (req,res) => {
 });
 
 app.post('/register', async (req,res) => {
-    const{name, email, password} = req.body;
-    const userDoc = await User.create({
-        name, 
+    //mongoose.Promise = global.Promise;
+    //mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }).then(
+    //    () => {console.log('Database is connected') },
+    //    err => { console.log('Can not connect to the database'+ err)}
+    //);
+
+    const {name,email,password} = req.body;
+    try {
+      const userDoc = await User.create({
+        name,
         email,
-        password:bcrypt.hashSync(password, bcryptSalt),
-    });
-    res.json({userDoc});
+        password,
+      });
+      res.json(userDoc);
+    } catch (e) {
+      res.status(422).json(e);
+    }
 });
 
 app.listen(4000);
