@@ -42,4 +42,21 @@ app.post('/register', async (req,res) => {
     }
 });
 
+app.post('/login', async (req,res) => {
+  console.log("does this actually get triggered");
+  mongoose.Promise = global.Promise;
+  mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }).then(
+      () => {console.log('Database is connected') },
+      err => { console.log('Can not connect to the database'+ err)}
+  );
+  const {email, password} = req.body;
+  const userDoc = await User.findOne({email});
+  if (userDoc) {
+    res.json('found');
+  }
+  else {
+    res.json('not found');
+  }
+});
+
 app.listen(process.env.PORT || 4000);
