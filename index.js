@@ -34,7 +34,7 @@ app.post('/register', async (req,res) => {
       const userDoc = await User.create({
         name,
         email,
-        password,
+        password:bcrypt.hashSync(password, bcryptSalt),
       });
       res.json(userDoc);
     } catch (e) {
@@ -52,7 +52,13 @@ app.post('/login', async (req,res) => {
   const {email, password} = req.body;
   const userDoc = await User.findOne({email});
   if (userDoc) {
-    res.json('found');
+    const passOk = bcrypt.compareSync(password, userDoc.password);
+    if (passOK) {
+      res.json('password is right');    
+    }
+    else {
+      res.json('password is incorrect');
+    }
   }
   else {
     res.json('not found');
