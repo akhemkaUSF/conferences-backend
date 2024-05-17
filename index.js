@@ -58,7 +58,7 @@ app.post('/login', async (req,res) => {
         email:userDoc.email,
         id:userDoc._id
       }, jwtSecret, {});
-      res.cookie('token', token);
+      res.cookie('token', token).json(userDoc);
     }
       catch(err) {
         throw err;
