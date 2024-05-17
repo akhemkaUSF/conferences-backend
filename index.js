@@ -46,7 +46,7 @@ app.post('/register', async (req,res) => {
     }
 });
 
-app.post('/api/login', async (req,res) => {
+app.post('/login', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {email,password} = req.body;
   const userDoc = await User.findOne({email});
@@ -67,7 +67,6 @@ app.post('/api/login', async (req,res) => {
     res.json('not found');
   }
 });
-
 
 app.get('/profile', (req,res) => {
   res.json('user info');
