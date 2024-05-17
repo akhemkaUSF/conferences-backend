@@ -46,35 +46,28 @@ app.post('/register', async (req,res) => {
     }
 });
 
-app.post('/login', async (req,res) => {
-  console.log("does this actually get triggered");
-  mongoose.Promise = global.Promise;
-  mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }).then(
-      () => {console.log('Database is connected') },
-      err => { console.log('Can not connect to the database'+ err)}
-  );
-  const {email, password} = req.body;
+app.post('/api/login', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {email,password} = req.body;
   const userDoc = await User.findOne({email});
   if (userDoc) {
     const passOk = bcrypt.compareSync(password, userDoc.password);
     if (passOk) {
-        jwt.sign({
-          email:userDoc.email,
-          id:userDoc._id
-        }, jwtSecret, {}, (err,token) => {
-          if (err) throw err;
-          res.cookie('token', token).json(userDoc);
-        });
-      res.cookie('token', '').json('password is right');    
+      jwt.sign({
+        email:userDoc.email,
+        id:userDoc._id
+      }, jwtSecret, {}, (err,token) => {
+        if (err) throw err;
+        res.cookie('token', token).json(userDoc);
+      });
+    } else {
+      res.status(422).json('pass not ok');
     }
-    else {
-      res.status(422).json('password is incorrect');
-    }
-  }
-  else {
+  } else {
     res.json('not found');
   }
 });
+
 
 app.get('/profile', (req,res) => {
   res.json('user info');
