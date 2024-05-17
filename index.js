@@ -71,7 +71,8 @@ app.post('/login', async (req,res) => {
 app.get('/profile', (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {token} = req.cookies;
-  if (token) {
+  res.json({token});
+  /*if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) throw err;
       const {name,email,_id} = await User.findById(userData.id);
@@ -79,7 +80,7 @@ app.get('/profile', (req,res) => {
     });
   } else {
     res.json(null);
-  }
+  }*/
 });
 
 app.listen(process.env.PORT || 4000);
