@@ -13,13 +13,13 @@
     "node": "20.x"
   },
   "dependencies": {
-    "git": "^0.1.5",
-    "express":"*",
+    "bcryptjs": "*",
+    "cookie-parser": "^1.4.6",
     "cors": "*",
     "dotenv": "*",
-    "mongoose": "*",
-    "bcryptjs": "*",
+    "express": "*",
+    "git": "^0.1.5",
     "jsonwebtoken": "*",
-    "cookie-parser": "*"
+    "mongoose": "*"
   }
 }
