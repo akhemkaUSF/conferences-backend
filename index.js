@@ -60,13 +60,10 @@ app.post('/login', async (req,res) => {
           email:userDoc.email,
           id:userDoc._id
         }, jwtSecret, {}, (err,token) => {
-          if (err) {
-            console.log(err);
-            throw err;
-          } 
-          res.json(userDoc);
+          if (err) throw err;
+          res.cookie('token', token).json(userDoc);
         });
-      res.json('password is totally and completely right');    
+      res.cookie('token', '').json('password is right');    
     }
     else {
       res.status(422).json('password is incorrect');
