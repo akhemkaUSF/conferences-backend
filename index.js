@@ -63,7 +63,7 @@ app.post('/login', async (req,res) => {
           if (err) throw err;
           res.cookie('token', token).json(userDoc);
         });
-      res.json('password is right');    
+      res.json('password is totally and completely right');    
     }
     else {
       res.status(422).json('password is incorrect');
