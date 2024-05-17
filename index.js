@@ -53,14 +53,18 @@ app.post('/login', async (req,res) => {
   if (userDoc) {
     const passOk = bcrypt.compareSync(password, userDoc.password);
     if (passOk) {
-      jwt.sign({
+      try {
+      const token = jwt.sign({
         email:userDoc.email,
         id:userDoc._id
-      }, jwtSecret, {}, (err,token) => {
-        if (err) throw err;
-        res.cookie('token', token).json(userDoc);
-      });
-    } else {
+      }, jwtSecret, {});
+      res.cookie('token', token);
+    }
+      catch(err) {
+        throw err;
+      }
+    } 
+    else {
       res.status(422).json('pass not ok');
     }
   } else {
@@ -71,8 +75,7 @@ app.post('/login', async (req,res) => {
 app.get('/profile', (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {token} = req.cookies;
-  res.json({token});
-  /*if (token) {
+  if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) throw err;
       const {name,email,_id} = await User.findById(userData.id);
@@ -80,7 +83,7 @@ app.get('/profile', (req,res) => {
     });
   } else {
     res.json(null);
-  }*/
+  }
 });
 
 app.listen(process.env.PORT || 4000);
