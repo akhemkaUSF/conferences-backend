@@ -6,10 +6,12 @@ const mongoose = require("mongoose");
 const User = require('./models/User.js');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const cookieParser = require('cookie-parser');
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'a;kdsfja;dfkjas;dfj';
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(cors(
     {

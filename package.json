@@ -19,6 +19,7 @@
     "dotenv": "*",
     "mongoose": "*",
     "bcryptjs": "*",
-    "jsonwebtoken": "*"
+    "jsonwebtoken": "*",
+    "cookie-parser": "*"
   }
 }
