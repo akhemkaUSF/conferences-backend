@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cors(
     {
         credentials: true,
-        origin: 'www.frontend.usfmunon.top',
+        origin: 'https://frontend.usfmunon.top',
     }
 ));
 
