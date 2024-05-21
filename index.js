@@ -72,6 +72,7 @@ app.post('/login', async (req,res) => {
 });
 
 app.get('/profile', (req,res) => {
+  console.log("retrieved");
   mongoose.connect(process.env.MONGO_URL);
   const {token} = req.cookies;
   if (token) {
