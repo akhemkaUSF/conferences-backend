@@ -9,7 +9,6 @@ const Booking = require('./models/Booking.js');
 const cookieParser = require('cookie-parser');
 const imageDownloader = require('image-downloader');
 const multer = require('multer');
-const fs = require('fs');
 const mime = require('mime-types');
 
 require('dotenv').config();
@@ -24,7 +23,7 @@ app.use(cookieParser());
 app.use('/uploads', express.static(__dirname+'/uploads'));
 app.use(cors({
   credentials: true,
-  origin: 'http://127.0.0.1:5173',
+  origin: 'https://www.frontend.usfmunon.top',
 }));
 
 
@@ -196,4 +195,4 @@ app.get('/bookings', async (req,res) => {
   res.json( await Booking.find({user:userData.id}).populate('place') );
 });
 
-app.listen(4000);
+app.listen(process.env.PORT || 4000);
