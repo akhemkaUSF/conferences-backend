@@ -96,10 +96,9 @@ app.post('/upload-by-link', async (req,res) => {
   const newName = 'photo' + Date.now() + '.jpg';
   await imageDownloader.image({
     url: link,
-    dest: '/tmp/' +newName,
+    dest: __dirname + '/uploads/'
   });
-  const url = await uploadToS3('/tmp/' +newName, newName, mime.lookup('/tmp/' +newName));
-  res.json(url);
+  res.json(newName);
 });
 
 const photosMiddleware = multer({dest:'/tmp'});
