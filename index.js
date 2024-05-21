@@ -21,11 +21,11 @@ const bucket = 'dawid-booking-app';
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname+'/uploads'));
+
 app.use(cors({
   credentials: true,
-  origin: 'https://frontend.usfmunon.top',
+  origin: 'http://localhost:5173',
 }));
-
 
 app.get('/test', (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
