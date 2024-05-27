@@ -16,16 +16,18 @@ require('dotenv').config();
 const app = express();
 
 const bcryptSalt = bcrypt.genSaltSync(10);
-const jwtSecret = 'a;dskfjagf3ewaacscdavad';
+const jwtSecret = 'gnqw;gnavak/lfjas';
 
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname+'/uploads'));
 
-app.use(cors({
+const corsOptions = {
   credentials: true,
-  origin: "https://frontend.usfmunon.top"
-}));
+  origin: ['http://conferences.usfmunon.top', 'https://conferences.usfmunon.top'] // Whitelist the domains you want to allow
+};
+
+app.use(cors(corsOptions));
 
 function getUserDataFromReq(req) {
   return new Promise((resolve, reject) => {
