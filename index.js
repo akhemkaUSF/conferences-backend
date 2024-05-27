@@ -5,8 +5,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 //equivalent to UserModel
 const User = require('./models/User.js');
-const Place = require('./models/Conference.js');
-const Booking = require('./models/Signups.js');
+const Conference = require('./models/Conference.js');
+const Signup = require('./models/Signups.js');
 const cookieParser = require('cookie-parser');
 const imageDownloader = require('image-downloader');
 const multer = require('multer');
