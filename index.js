@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 //equivalent to UserModel
 const User = require('./models/User.js');
 const Place = require('./models/Place.js');
-const Booking = require('./models/Booking.js');
+const Booking = require('./models/Signups.js');
 const cookieParser = require('cookie-parser');
 const imageDownloader = require('image-downloader');
 const multer = require('multer');
@@ -16,8 +16,7 @@ require('dotenv').config();
 const app = express();
 
 const bcryptSalt = bcrypt.genSaltSync(10);
-const jwtSecret = 'fasefraw4r5r3wq45wdfgw34twdfg';
-const bucket = 'dawid-booking-app';
+const jwtSecret = 'a;dskfjagf3ewaacscdavad';
 
 app.use(express.json());
 app.use(cookieParser());
@@ -61,6 +60,8 @@ app.post('/register', async (req,res) => {
   }
 
 });
+
+app.delete()
 
 
 app.post('/login', async (req,res) => {
@@ -113,106 +114,83 @@ app.post('/logout', (req,res) => {
   res.cookie('token', '').json(true);
 });
 
-//come back to the photos endpoints
-app.post('/upload-by-link', async (req,res) => {
-  const {link} = req.body;
-  const newName = 'photo' + Date.now() + '.jpg';
-  await imageDownloader.image({
-    url: link,
-    dest: __dirname + '/uploads/'
-  });
-  res.json(newName);
-});
-
-const photosMiddleware = multer({dest:'/tmp'});
-app.post('/upload', photosMiddleware.array('photos', 100), async (req,res) => {
-  const uploadedFiles = [];
-  for (let i = 0; i < req.files.length; i++) {
-    const {path,originalname,mimetype} = req.files[i];
-    const url = await uploadToS3(path, originalname, mimetype);
-    uploadedFiles.push(url);
-  }
-  res.json(uploadedFiles);
-});
-
-app.post('/places', (req,res) => {
+app.post('/conferences', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
-  //getrs the user token
+  //gets the user token
   const {token} = req.cookies;
   //gets all the various variables from the request body sent in the axios command
   const {
-    title,address,addedPhotos,description,price,
-    perks,extraInfo,checkIn,checkOut,maxGuests,
+    name, signups, city, delegateFee, hotelCost, transportationCost, startDate,
+    endDate, delegateFeeRefund, hotelRefund
   } = req.body;
-  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-    if (err) throw err;
-    //if the variable doesn't match the one in the model, it's assigned 
-    // otherwise, you just put in the variable as it is 
-    const placeDoc = await Place.create({
-      owner:userData.id,price,
-      title,address,photos:addedPhotos,description,
-      perks,extraInfo,checkIn,checkOut,maxGuests,
+    const conferenceDoc = await Conference.create({
+    name, signups, city, delegateFee, hotelCost, transportationCost, startDate,
+    endDate, delegateFeeRefund, hotelRefund
     });
-    res.json(placeDoc);
+    res.json(conferenceDoc);
   });
-});
 
-//responds with the places that have the relevant owner ID 
-app.get('/user-places', (req,res) => {
+
+  
+//responds with the conferences that have the relevant owner ID 
+app.get('/user-conferences', (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {token} = req.cookies;
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if (err) {
+      throw err;
+    }
     const {id} = userData;
-    res.json( await Place.find({owner:id}) );
+    res.json( await Conference.find({'signups': id}) );
   });
 });
 
 //get specific place based on the ObjectID
-app.get('/places/:id', async (req,res) => {
+app.get('/conferences/:id', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {id} = req.params;
-  res.json(await Place.findById(id));
+  res.json(await Conference.findById(id));
 });
 
 //update values
-app.put('/places', async (req,res) => {
+app.put('/conferences', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {token} = req.cookies;
   const {
-    id, title,address,addedPhotos,description,
-    perks,extraInfo,checkIn,checkOut,maxGuests,price,
+    id, name, signups, city, delegateFee, hotelCost, transportationCost, startDate,
+    endDate, delegateFeeRefund, hotelRefund
   } = req.body;
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
     if (err) throw err;
-    const placeDoc = await Place.findById(id);
-    if (userData.id === placeDoc.owner.toString()) {
+    const conferenceDoc = await Conference.findById(id);
+    if (conferenceDoc.signups.includes(userData.id)) {
       //straight up just updates all values except for ID, since ID's the only one that's certain to remain constant
-      placeDoc.set({
-        title,address,photos:addedPhotos,description,
-        perks,extraInfo,checkIn,checkOut,maxGuests,price,
+      conferenceDoc.set({
+        name, signups, city, delegateFee, hotelCost, transportationCost, startDate,
+    endDate, delegateFeeRefund, hotelRefund,
       });
-      await placeDoc.save();
+      await conferenceDoc.save();
       res.json('ok');
     }
   });
 });
 
 //just gets all the places
-app.get('/places', async (req,res) => {
+app.get('/conferences', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   //Places.find() returns everything I guess
-  res.json( await Place.find() );
+  res.json( await Conference.find() );
 });
 
 //
-app.post('/bookings', async (req, res) => {
+app.post('/signups', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const userData = await getUserDataFromReq(req);
   const {
     place,checkIn,checkOut,numberOfGuests,name,phone,price,
   } = req.body;
-  Booking.create({
-    place,checkIn,checkOut,numberOfGuests,name,phone,price,
+  Signup.create({
+    canDrive,passengers,paid,refunded,questions,
     user:userData.id,
   }).then((doc) => {
     res.json(doc);
@@ -222,11 +200,11 @@ app.post('/bookings', async (req, res) => {
 });
 
 //
-app.get('/bookings', async (req,res) => {
+app.get('/signups', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const userData = await getUserDataFromReq(req);
   //returns the place for each of the user Bookings
-  res.json( await Booking.find({user:userData.id}).populate('place'));
+  res.json( await Signup.find({user:userData.id}).populate('conference'));
 });
 
 app.listen(process.env.PORT || 4000);
