@@ -63,9 +63,6 @@ app.post('/register', async (req,res) => {
 
 });
 
-app.delete()
-
-
 app.post('/login', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   //email and password are included the request we send through axios
