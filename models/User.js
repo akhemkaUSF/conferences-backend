@@ -6,7 +6,6 @@ const UserSchema = new Schema({
     name: String,
     //email must be unique -- if it's a duplicate, it results in an error (which we actually don't have a handler for right now)
     email: {type: String, unique:true},
-    phone: {type: Number, unique: true},
     password: String,
 });
 
