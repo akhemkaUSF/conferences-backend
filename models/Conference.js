@@ -9,10 +9,10 @@ const ConferenceSchema = new Schema({
     delegationFee: Number,
     hotelCost: Number,
     transportationCost: Number,
-    startDate: Date,
-    endDate: Date,
-    delegateFeeRefund: Date,
-    hotelRefund: Date
+    startDate: String,
+    endDate: String,
+    delegateFeeRefund: String,
+    hotelRefund: String
 });
 
 const ConferenceModel = mongoose.model('Conference', ConferenceSchema);
