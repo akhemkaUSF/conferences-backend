@@ -154,24 +154,18 @@ app.get('/conferences/:id', async (req,res) => {
 //update values
 app.put('/conferences', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
-  const {token} = req.cookies;
   const {
     id, name, signups, city, delegateFee, hotelCost, transportationCost, startDate,
     endDate, delegateFeeRefund, hotelRefund
   } = req.body;
-  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-    if (err) throw err;
     const conferenceDoc = await Conference.findById(id);
-    if (conferenceDoc.signups.includes(userData.id)) {
-      //straight up just updates all values except for ID, since ID's the only one that's certain to remain constant
-      conferenceDoc.set({
-        name, signups, city, delegateFee, hotelCost, transportationCost, startDate,
-    endDate, delegateFeeRefund, hotelRefund,
-      });
-      await conferenceDoc.save();
-      res.json('ok');
-    }
-  });
+    //straight up just updates all values except for ID, since ID's the only one that's certain to remain constant
+    conferenceDoc.set({
+      name, signups, city, delegateFee, hotelCost, transportationCost, startDate,
+      endDate, delegateFeeRefund, hotelRefund,
+    });
+    await conferenceDoc.save();
+    res.json('ok');
 });
 
 //just gets all the places
