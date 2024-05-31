@@ -182,6 +182,7 @@ app.post('/signups', async (req, res) => {
   const {
     canDrive, passengers, paid, refunded, additionalInfo, committeePreferences
   } = req.body;
+  console.log(canDrive);
   Signup.create({
     canDrive,passengers,paid,refunded,additionalInfo, committeePreferences,
     user:userData.id,
