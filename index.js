@@ -208,13 +208,14 @@ app.get('/signups', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const userData = await getUserDataFromReq(req);
   //returns the place for each of the user Bookings
-  res.json( await Signup.find({user:userData.id}));
+  res.json( await Signup.find({user:userData.id}).populate('conference'));
 });
 
 app.get('/signups/:id', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {id} = req.params;
-  res.json(await Signup.findById(id));
+  const signups = await Signup.findById(id);
+
 });
 
 app.put('/signups', async (req,res) => {
