@@ -194,7 +194,7 @@ app.post('/signups', async (req, res) => {
   } = req.body;
   console.log(canDrive);
   Signup.create({
-    user:userData.id, conference: conferenceID, canDrive,passengers, delegateFeePaid: false, hotelFeePaid: false, refunded: false, 
+    conference: conferenceID, user:userData.id, canDrive,passengers, delegateFeePaid: false, hotelFeePaid: false, refunded: false, 
     additionalInfo, committeePreferences,
   }).then((doc) => {
     res.json(doc);
