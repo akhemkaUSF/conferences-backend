@@ -175,17 +175,27 @@ app.get('/conferences', async (req,res) => {
   res.json( await Conference.find() );
 });
 
-//
+/*
+  conference: {type:mongoose.Schema.Types.ObjectId, required:true, ref:'Conference'},
+  user: {type:mongoose.Schema.Types.ObjectId, required:true},
+  canDrive: Boolean,
+  passengers: Number,
+  delegateFeePaid: Boolean,
+  hotelFeePaid: Boolean,
+  refunded: Boolean,
+  additionalInfo: String,
+  committeePreferences: String,
+  */
 app.post('/signups', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const userData = await getUserDataFromReq(req);
   const {
-    canDrive, passengers, paid, refunded, additionalInfo, committeePreferences
+    conferenceID, canDrive, passengers, additionalInfo, committeePreferences
   } = req.body;
   console.log(canDrive);
   Signup.create({
-    canDrive,passengers,paid,refunded,additionalInfo, committeePreferences,
-    user:userData.id,
+    user:userData.id, conference: conferenceID, canDrive,passengers, delegateFeePaid: false, hotelFeePaid: false, refunded: false, 
+    additionalInfo, committeePreferences,
   }).then((doc) => {
     res.json(doc);
   }).catch((err) => {
