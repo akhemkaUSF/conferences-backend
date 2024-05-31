@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const bookingSchema = new mongoose.Schema({
+const signupSchema = new mongoose.Schema({
   //ref: 'Place' means that the ObectID stored in the place variable must match an objectID in the place collection  
   conference: {type:mongoose.Schema.Types.ObjectId, required:true, ref:'Conference'},
   user: {type:mongoose.Schema.Types.ObjectId, required:true},
@@ -9,8 +9,10 @@ const bookingSchema = new mongoose.Schema({
   delegateFeePaid: Boolean,
   hotelFeePaid: Boolean,
   refunded: Boolean,
+  additionalInfo: String,
+  committeePreferences: String,
 });
 
-const BookingModel = mongoose.model('Booking', bookingSchema);
+const SignupModel = mongoose.model('Signup', signupSchema);
 
-module.exports = BookingModel;
+module.exports = SignupModel;

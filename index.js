@@ -180,10 +180,10 @@ app.post('/signups', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const userData = await getUserDataFromReq(req);
   const {
-    place,checkIn,checkOut,numberOfGuests,name,phone,price,
+    canDrive, passengers, paid, refunded, additionalInfo, committeePreferences
   } = req.body;
   Signup.create({
-    canDrive,passengers,paid,refunded,questions,
+    canDrive,passengers,paid,refunded,additionalInfo, committeePreferences,
     user:userData.id,
   }).then((doc) => {
     res.json(doc);
@@ -197,7 +197,27 @@ app.get('/signups', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const userData = await getUserDataFromReq(req);
   //returns the place for each of the user Bookings
-  res.json( await Signup.find({user:userData.id}).populate('conference'));
+  res.json( await Signup.find({user:userData.id}));
+});
+
+app.get('/signups/:id', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {id} = req.params;
+  res.json(await Signup.findById(id));
+});
+
+app.put('/signups', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {
+    id, conference, canDrive, passengers, additionalInfo, committeePreferences
+  } = req.body;
+    const signupDoc = await Signup.findById(id);
+    //straight up just updates all values except for ID, since ID's the only one that's certain to remain constant
+    signupDoc.set({
+      id, conference, canDrive, passengers, additionalInfo, committeePreferences
+    });
+    await signupDoc.save();
+    res.json('ok');
 });
 
 app.listen(process.env.PORT || 4000);
