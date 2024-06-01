@@ -7,6 +7,7 @@ const UserSchema = new Schema({
     //email must be unique -- if it's a duplicate, it results in an error (which we actually don't have a handler for right now)
     email: {type: String},
     password: String,
+    admin: Boolean,
 });
 
 const UserModel = mongoose.model('User', UserSchema);

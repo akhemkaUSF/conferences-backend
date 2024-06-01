@@ -55,6 +55,7 @@ app.post('/register', async (req,res) => {
       name,
       email,
       password:bcrypt.hashSync(password, bcryptSalt),
+      admin,
     });
     res.json(userDoc);
   } catch (e) {
@@ -76,7 +77,8 @@ app.post('/login', async (req,res) => {
       //email && id are saved in the jsonWebToken
       jwt.sign({
         email:userDoc.email,
-        id:userDoc._id
+        id:userDoc._id,
+        admin: userDoc.admin
       }, jwtSecret, {}, (err,token) => {
         if (err) throw err;
         res.cookie('token', token).json(userDoc);
@@ -100,8 +102,8 @@ app.get('/profile', (req,res) => {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) throw err;
       //calls the findById function, and retrieves the name, email, and id for the specific user
-      const {name,email,_id} = await User.findById(userData.id);
-      res.json({name,email,_id});
+      const {name,email,_id, admin} = await User.findById(userData.id);
+      res.json({name,email,_id, admin});
     });
   } else {
     res.json(null);
