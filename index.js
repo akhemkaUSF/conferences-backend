@@ -231,11 +231,11 @@ app.put('/signups', async (req,res) => {
     res.json('ok');
 });
 
-app.get('/conference-signups', async (req,res) => {
+app.get('/conference-signups/:conferenceID', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
-  const {conferenceID} = req.body;
+  const {conferenceID} = req.params;
   //returns the place for each of the user Bookings
-  res.json( await Signup.find({conference:conferenceID}).populate('conference'));
+  res.json( await Signup.find({conference:conferenceID}).populate('user'));
 });
 
 
