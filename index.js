@@ -46,7 +46,7 @@ app.get('/test', (req,res) => {
 app.post('/register', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   //name, email, and password are included in the request body that we send with the axios.post request
-  const {name,email,password} = req.body;
+  const {name,email,password, admin} = req.body;
 
   //we create a userDoc and send it
   //User.create is a mongoose function and it puts the newUser in our mongoDB database
