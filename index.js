@@ -240,5 +240,22 @@ app.get('/conference-signups/:conferenceID', async (req,res) => {
   res.json( await Signup.find({conference:conferenceID}).populate('user'));
 });
 
+app.get('/users', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  //Places.find() returns everything I guess
+  res.json( await User.find() );
+});
+
+app.put('/user', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const admin = req.body;
+  const userData = await getUserDataFromReq(req);
+  const userDoc = await User.findById(userData.id);
+  userDoc.set({
+    admin,
+  });
+  await userDoc.save();
+  res.json('ok');
+});
 
 app.listen(process.env.PORT || 4000);
