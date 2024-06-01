@@ -214,8 +214,7 @@ app.get('/signups', async (req,res) => {
 app.get('/signups/:id', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {id} = req.params;
-  const signups = await Signup.findById(id);
-
+  res.json(await Signup.findById(id));
 });
 
 app.put('/signups', async (req,res) => {
