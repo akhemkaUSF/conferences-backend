@@ -248,7 +248,7 @@ app.get('/users', async (req,res) => {
 
 app.put('/user', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
-  const admin = req.body;
+  const {admin} = req.body;
   const userData = await getUserDataFromReq(req);
   const userDoc = await User.findById(userData.id);
   userDoc.set({
