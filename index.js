@@ -231,4 +231,12 @@ app.put('/signups', async (req,res) => {
     res.json('ok');
 });
 
+app.get('/conference-signups', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {conferenceID} = req.body;
+  //returns the place for each of the user Bookings
+  res.json( await Signup.find({conference:conferenceID}).populate('conference'));
+});
+
+
 app.listen(process.env.PORT || 4000);
