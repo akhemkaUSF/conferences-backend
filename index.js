@@ -59,7 +59,7 @@ app.get('/test', (req,res) => {
 app.post('/register', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   //name, email, and password are included in the request body that we send with the axios.post request
-  const {name,email,password, admin} = req.body;
+  const {name,email, phoneNumber, password, admin} = req.body;
   const data = await User.find({email:email});
   const phoneData = await User.find({phoneNumber: phoneNumber});
   if (data.length!=0|| phoneData.length!=0) {
@@ -140,8 +140,8 @@ app.get('/profile', (req,res) => {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) throw err;
       //calls the findById function, and retrieves the name, email, and id for the specific user
-      const {name,email,_id, admin} = await User.findById(userData.id);
-      res.json({name,email,_id, admin});
+      const {name,email,_id, phoneNumber, admin} = await User.findById(userData.id);
+      res.json({name,email,_id, phoneNumber, admin});
     });
   } else {
     res.json(null);
