@@ -298,7 +298,7 @@ app.delete('/user/:userID', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {userID} = req.params;
   const data = await Signup.find({user:userID});
-  if (data!=null) {
+  if (data.length != 0) {
     res.json(data);
   }
   else {
