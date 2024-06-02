@@ -56,6 +56,34 @@ app.get('/test', (req,res) => {
   res.json('test ok');
 });
 
+app.post('/reset', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {email} = req.body;
+  const userDoc = await User.findOne({email});
+  if (userDoc==null) {
+    res.json("There is no email associated with this account");
+  }
+  else {
+    const link = "https://conferences.usfmunon.top/reset/" + userDoc._id;
+
+    const mailOptions = {
+      from: 'soccer.anuj@gmail.com',
+      to: userDoc.email,
+      subject: 'Password Reset - Conference Coordinator',
+      text: "Visit <a href={link}>Link</a>"
+    };
+  
+    // Send the email
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        res.json('Error:', error);
+      } else {
+        res.json("The reset email has been sent");
+      }
+    });
+  }
+});
+
 app.post('/register', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   //name, email, and password are included in the request body that we send with the axios.post request
