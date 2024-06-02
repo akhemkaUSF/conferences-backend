@@ -60,21 +60,27 @@ app.post('/register', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   //name, email, and password are included in the request body that we send with the axios.post request
   const {name,email,password, admin} = req.body;
-
+  const data = await User.find({email:email});
+  const phoneData = await User.find({phoneNumber: phoneNumber});
+  if (data.length!=0|| phoneData.length!=0) {
+    res.json("There is already an account associated with this email address or phone number");
+  }
+  else {
+    try {
+      const userDoc = await User.create({
+        name,
+        email,
+        phoneNumber,
+        password:bcrypt.hashSync(password, bcryptSalt),
+        admin,
+      });
   //we create a userDoc and send it
   //User.create is a mongoose function and it puts the newUser in our mongoDB database
-  try {
-    const userDoc = await User.create({
-      name,
-      email,
-      password:bcrypt.hashSync(password, bcryptSalt),
-      admin,
-    });
-    res.json(userDoc);
-  } catch (e) {
-    res.status(422).json(e);
+      res.json("You have successfully registered! Go to the login page to begin using the conference coordinator.");
+    } catch (e) {
+      res.status(422).json(e);
+    }
   }
-
 });
 
 app.post('/login', async (req,res) => {
