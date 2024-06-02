@@ -65,6 +65,7 @@ app.post('/reset', async (req,res) => {
   }
   else {
     const password = Math.random().toString(36).slice(2);
+    console.log(password);
     userDoc.set({
       password:bcrypt.hashSync(password, bcryptSalt)
     })
