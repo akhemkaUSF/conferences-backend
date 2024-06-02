@@ -294,10 +294,10 @@ app.put('/user', async (req,res) => {
   res.json('ok');
 });
 
-app.delete('/user', async (req,res) => {
+app.delete('/user/:id', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
-  const {userID} = req.body;
-  const data = await Signup.find({user:userData.id});
+  const {userID} = req.params;
+  const data = await Signup.find({user:userID});
   if (data!=null) {
     res.json('first delete all the signups for this user');
   }
