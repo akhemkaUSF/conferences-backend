@@ -64,13 +64,19 @@ app.post('/reset', async (req,res) => {
     res.json("There is no email associated with this account");
   }
   else {
-    const link = "https://conferences.usfmunon.top/reset/" + userDoc._id;
+    const password = Math.random().toString(36).slice(2);
+    userDoc.set({
+      password:bcrypt.hashSync(password, bcryptSalt)
+    })
+    await userDoc.save();
+
+    const link = "https://conferences.usfmunon.top/changePassword/";
 
     const mailOptions = {
       from: 'soccer.anuj@gmail.com',
       to: userDoc.email,
       subject: 'Password Reset - Conference Coordinator',
-      html: '<p>Click <a href="https://conferences.usfmunon.top/reset/' + userDoc._id + '">here</a> to reset your password</p>'
+      html: '<p>Click <a href="https://conferences.usfmunon.top/reset/' + userDoc._id + '">here</a> to reset your password. Your temporary password is <var>password</var></p>'
     };
   
     // Send the email
