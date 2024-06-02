@@ -56,6 +56,25 @@ app.get('/test', (req,res) => {
   res.json('test ok');
 });
 
+app.put('/change', async(req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {oldPassword, newPassword} = req.body;
+  const userData = await getUserDataFromReq(req);
+
+  const passOk = bcrypt.compareSync(oldPassword, userData.password);
+  if (!passOk) {
+    res.json("not ok");
+  }
+  else {
+    const userDoc = await User.findById(userData.id);
+    userDoc.set({
+      password:bcrypt.hashSync(newPassword, bcryptSalt)
+    })
+    await userDoc.save();
+    res.json("ok");
+  }
+})
+
 app.post('/reset', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {email} = req.body;
@@ -75,7 +94,7 @@ app.post('/reset', async (req,res) => {
       from: 'soccer.anuj@gmail.com',
       to: userDoc.email,
       subject: 'Password Reset - Conference Coordinator',
-      html: '<p>Your temporary password is ' + password + ' Click <a href="https://conferences.usfmunon.top/login/">here</a> to login. </p>'
+      html: '<p>Your temporary password is ' + password + ' Click <a href="https://conferences.usfmunon.top/login/">here</a> to login. Afterwards, navigate to your profile page to change the password</p>'
     };
   
     // Send the email
