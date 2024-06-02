@@ -77,7 +77,7 @@ app.post('/reset', async (req,res) => {
       from: 'soccer.anuj@gmail.com',
       to: userDoc.email,
       subject: 'Password Reset - Conference Coordinator',
-      html: '<p>Click <a href="https://conferences.usfmunon.top/reset/' + userDoc._id + '">here</a> to reset your password. Your temporary password is <var>password</var></p>'
+      html: '<p>Click <a href="https://conferences.usfmunon.top/reset/' + userDoc._id + '">here</a> to reset your password. Your temporary password is ' + password + ' </p>'
     };
   
     // Send the email
