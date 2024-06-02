@@ -14,15 +14,8 @@ const mime = require('mime-types');
 const nodemailer = require('nodemailer');
 const schedule = require('node-schedule');
 
-const twilio = require('twilio');
-
-
-
 require('dotenv').config();
 const app = express();
-
-const accountSid = process.env.TWILIO_ACCOUNT_SID; 
-const authToken = process.env.TWILIO_AUTH_TOKEN;
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'gnqw;gnavak/lfjas';
