@@ -297,15 +297,14 @@ app.put('/user', async (req,res) => {
 app.delete('/user/:userID', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {userID} = req.params;
-  res.json(await Signup.find({user:userID}));
-  /*console.log(data);
+  const {data} = await Signup.find({user:userID});
   if (data!=null) {
     res.json(data);
   }
   else {
     const result = await User.findByIdAndDelete(userID);
     res.json('ok');
-  }*/
+  }
 });
 
 app.listen(process.env.PORT || 4000);
