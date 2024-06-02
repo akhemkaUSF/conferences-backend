@@ -60,7 +60,9 @@ app.put('/change', async(req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {oldPassword, newPassword} = req.body;
   const userData = await getUserDataFromReq(req);
-
+  console.log(oldPassword);
+  console.log(userData);
+  
   const passOk = bcrypt.compareSync(oldPassword, userData.password);
   if (!passOk) {
     res.json("not ok");
