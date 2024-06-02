@@ -12,6 +12,7 @@ const imageDownloader = require('image-downloader');
 const multer = require('multer');
 const mime = require('mime-types');
 const nodemailer = require('nodemailer');
+const schedule = require('node-schedule');
 
 require('dotenv').config();
 const app = express();
@@ -90,12 +91,14 @@ app.post('/login', async (req,res) => {
   };
 
   // Send the email
-  transporter.sendMail(mailOptions, function(error, info){
-    if (error) {
-      console.log('Error:', error);
-    } else {
-      console.log('Email sent:', info.response);
-    }
+  const job = schedule.scheduleJob('45 * * * *', function() {
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log('Error:', error);
+      } else {
+        console.log('Email sent:', info.response);
+      }
+    });
   });
 
   //findOne function helps us find a User with the given email value (since that's supposed to be unique)
