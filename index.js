@@ -14,8 +14,15 @@ const mime = require('mime-types');
 const nodemailer = require('nodemailer');
 const schedule = require('node-schedule');
 
+const twilio = require('twilio');
+
+
+
 require('dotenv').config();
 const app = express();
+
+const accountSid = process.env.TWILIO_ACCOUNT_SID; 
+const authToken = process.env.TWILIO_AUTH_TOKEN;
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'gnqw;gnavak/lfjas';
@@ -91,7 +98,7 @@ app.post('/login', async (req,res) => {
   };
 
   // Send the email
-  const job = schedule.scheduleJob('45 * * * *', function() {
+  /*const job = schedule.scheduleJob('45 * * * *', function() {
     transporter.sendMail(mailOptions, function(error, info){
       if (error) {
         console.log('Error:', error);
@@ -99,7 +106,7 @@ app.post('/login', async (req,res) => {
         console.log('Email sent:', info.response);
       }
     });
-  });
+  });*/
 
   //findOne function helps us find a User with the given email value (since that's supposed to be unique)
   const userDoc = await User.findOne({email});
