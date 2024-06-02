@@ -71,13 +71,11 @@ app.post('/reset', async (req,res) => {
     })
     await userDoc.save();
 
-    const link = "https://conferences.usfmunon.top/changePassword/";
-
     const mailOptions = {
       from: 'soccer.anuj@gmail.com',
       to: userDoc.email,
       subject: 'Password Reset - Conference Coordinator',
-      html: '<p>Click <a href="https://conferences.usfmunon.top/reset/' + userDoc._id + '">here</a> to reset your password. Your temporary password is ' + password + ' </p>'
+      html: '<p>Your temporary password is ' + password + ' Click <a href="https://conferences.usfmunon.top/login/">here</a> to login. </p>'
     };
   
     // Send the email
