@@ -11,6 +11,7 @@ const cookieParser = require('cookie-parser');
 const imageDownloader = require('image-downloader');
 const multer = require('multer');
 const mime = require('mime-types');
+const nodemailer = require('nodemailer');
 
 require('dotenv').config();
 const app = express();
@@ -28,6 +29,17 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "soccer.anuj@gmail.com",
+    pass: "jwbt ywnr iovn qigg",
+  },
+});
 
 function getUserDataFromReq(req) {
   return new Promise((resolve, reject) => {
@@ -68,6 +80,23 @@ app.post('/login', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   //email and password are included the request we send through axios
   const {email,password} = req.body;
+
+  // Configure the mailoptions object
+  const mailOptions = {
+    from: 'soccer.anuj@gmail.com',
+    to: 'anuj.khemka.us@gmail.com',
+    subject: 'Sending Email using Node.js',
+    text: 'That was easy!'
+  };
+
+  // Send the email
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log('Error:', error);
+    } else {
+      console.log('Email sent:', info.response);
+    }
+  });
 
   //findOne function helps us find a User with the given email value (since that's supposed to be unique)
   const userDoc = await User.findOne({email});
@@ -131,8 +160,6 @@ app.post('/conferences', async (req,res) => {
     res.json(conferenceDoc);
   });
 
-
-  
 //responds with the conferences that have the relevant owner ID 
 app.get('/user-conferences', (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
@@ -258,3 +285,7 @@ app.put('/user', async (req,res) => {
 });
 
 app.listen(process.env.PORT || 4000);
+
+// Import the Nodemailer library
+
+
