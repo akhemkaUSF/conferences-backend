@@ -256,6 +256,13 @@ app.get('/signups/:id', async (req,res) => {
   res.json(await Signup.findById(id));
 });
 
+app.delete('/signups/:id', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {id} = req.params;
+  await Signup.findByIdAndDelete(id)
+  res.json('ok');
+});
+
 app.put('/signups', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {
@@ -292,6 +299,19 @@ app.put('/user', async (req,res) => {
   });
   await userDoc.save();
   res.json('ok');
+});
+
+app.delete('/user', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {userID} = req.body;
+  const data = await Signup.find({user:userData.id});
+  if (data!=null) {
+    res.json('first delete all the signups for this user');
+  }
+  else {
+    const result = await User.findByIdAndDelete(userID);
+    res.json('ok');
+  }
 });
 
 app.listen(process.env.PORT || 4000);
