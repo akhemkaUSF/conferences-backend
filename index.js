@@ -294,7 +294,7 @@ app.put('/user', async (req,res) => {
   res.json('ok');
 });
 
-app.delete('/user/:id', async (req,res) => {
+app.delete('/user/:userID', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {userID} = req.params;
   res.json(await Signup.find({user:userID}));
