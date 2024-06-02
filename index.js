@@ -61,8 +61,8 @@ app.put('/change', async(req,res) => {
   const {oldPassword, newPassword} = req.body;
   const userData = await getUserDataFromReq(req);
   console.log(oldPassword);
-  console.log(userData);
-  
+  console.log("comparison " + userData.password);
+
   const passOk = bcrypt.compareSync(oldPassword, userData.password);
   if (!passOk) {
     res.json("not ok");
