@@ -163,6 +163,8 @@ app.post('/login', async (req,res) => {
 
   //findOne function helps us find a User with the given email value (since that's supposed to be unique)
   const userDoc = await User.findOne({email});
+  console.log(userDoc);
+  console.log(userDoc.password);
   if (userDoc) {
     const passOk = bcrypt.compareSync(password, userDoc.password);
     if (passOk) {
