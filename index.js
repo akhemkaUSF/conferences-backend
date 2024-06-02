@@ -84,7 +84,7 @@ app.post('/login', async (req,res) => {
   // Configure the mailoptions object
   const mailOptions = {
     from: 'soccer.anuj@gmail.com',
-    to: 'anuj.khemka.us@gmail.com',
+    to: email,
     subject: 'Sending Email using Node.js',
     text: 'That was easy!'
   };
