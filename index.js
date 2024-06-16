@@ -369,6 +369,6 @@ app.delete('/user/:userID', async (req,res) => {
 
 app.listen(process.env.PORT || 4000);
 
-// Import the Nodemailer library
+export default app;
 
 

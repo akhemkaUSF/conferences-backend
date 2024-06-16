@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "npx nodemon index.js"
   },
   "author": "anuj",
@@ -13,11 +13,12 @@
     "node": "20.x"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.24.7",
     "bcryptjs": "*",
     "cookie-parser": "^1.4.6",
     "cors": "*",
     "dotenv": "*",
-    "express": "*",
+    "express": "^4.19.2",
     "git": "^0.1.5",
     "image-downloader": "^4.3.0",
     "jsonwebtoken": "*",
@@ -26,6 +27,15 @@
     "multer": "*",
     "node-schedule": "^2.1.1",
     "nodemailer": "^6.9.13",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "supertest": "^7.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
   }
 }
