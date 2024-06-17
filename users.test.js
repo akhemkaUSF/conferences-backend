@@ -6,7 +6,7 @@ test('should return test ok', async () => {
   const response = await request(app).get('/test');
   console.log(response);
   expect(response.status).toBe(200);
-  expect(response.body).toEqual("test ok");
+  expect(response.body).toEqual("no you stupid");
 });
 
 test('test console.log', () => {
