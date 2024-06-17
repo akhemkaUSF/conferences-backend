@@ -1,6 +1,6 @@
 //users.test.js
 const request = require('supertest');
-import app from './index.js';
+import app, {server} from './index.js';
 
 test('should return test ok', async () => {
   const response = await request(app).get('/test');
@@ -11,3 +11,7 @@ test('should return test ok', async () => {
 test('test console.log', () => {
     console.log("is this permission denied too");
 });
+
+afterAll(() => {
+    server.close();
+  });

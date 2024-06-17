@@ -367,8 +367,9 @@ app.delete('/user/:userID', async (req,res) => {
   }
 });
 
-app.listen(process.env.PORT || 4000);
+const server = app.listen(process.env.PORT || 4000);
 
 export default app;
+export {server};
 
 
