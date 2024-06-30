@@ -368,7 +368,7 @@ app.delete('/user/:userID', async (req,res) => {
   }
 });
 
-app.post('/travel', async (req, res) => {
+app.post('/travels', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {
     conferenceID, travelType, origin, destination, departureTime
@@ -396,11 +396,23 @@ app.put('/travels', async (req,res) => {
     res.json('ok');
 });
 
-app.delete('/travel/:travelID', async (req,res) => {
+app.get('/travels', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  //Places.find() returns everything I guess
+  res.json( await Travel.find() );
+});
+
+app.delete('/travels/:travelID', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {travelID} = req.params;
   const result = await Travel.findByIdAndDelete(travelID);
   res.json('ok');
+});
+
+app.get('/travels/:id', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {id} = req.params;
+  res.json(await Travel.findById(id));
 });
 
 app.listen(process.env.PORT || 4000);
