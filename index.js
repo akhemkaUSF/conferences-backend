@@ -385,12 +385,12 @@ app.post('/travels', async (req, res) => {
 app.put('/travels', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {
-    id, conference, travelType, origin, destination, departureTime
+    id, conferenceID, travelType, origin, destination, departureTime
   } = req.body;
     const travelDoc = await Travel.findById(id);
     //straight up just updates all values except for ID, since ID's the only one that's certain to remain constant
     travelDoc.set({
-      id, conference, travelType, origin, destination, departureTime
+      id, conference: conferenceID, travelType, origin, destination, departureTime
     });
     await travelDoc.save();
     res.json('ok');
