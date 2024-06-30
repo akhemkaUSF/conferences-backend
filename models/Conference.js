@@ -9,8 +9,8 @@ const ConferenceSchema = new Schema({
     delegationFee: Number,
     hotelCost: Number,
     transportationCost: Number,
-    startDate: String,
-    endDate: String,
+    startDate: Date,
+    endDate: Date,
     delegateFeeRefund: String,
     hotelRefund: String
 });
