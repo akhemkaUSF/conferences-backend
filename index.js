@@ -406,7 +406,7 @@ app.delete('/travels/:travelID', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {travelID} = req.params;
   const result = await Travel.findByIdAndDelete(travelID);
-  res.json(result);
+  res.json("test api response");
 });
 
 app.get('/travels/:id', async (req,res) => {
