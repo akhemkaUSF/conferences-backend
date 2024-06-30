@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const User = require('./models/User.js');
 const Conference = require('./models/Conference.js');
 const Signup = require('./models/Signups.js');
+const Travel = require('./models/Travel.js');
 const cookieParser = require('cookie-parser');
 const imageDownloader = require('image-downloader');
 const multer = require('multer');
@@ -367,9 +368,41 @@ app.delete('/user/:userID', async (req,res) => {
   }
 });
 
-const server = app.listen(process.env.PORT || 4000);
+app.post('/travel', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {
+    conferenceID, travelType, origin, destination, departureTime
+  } = req.body;
+  Travel.create({
+    conference: conferenceID, travelType, origin, destination, departureTime
+  }).then((doc) => {
+    res.json(doc);
+  }).catch((err) => {
+    throw err;
+  });
+});
 
-export default app;
-export {server};
+app.put('/travels', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {
+    id, conference, travelType, origin, destination, departureTime
+  } = req.body;
+    const travelDoc = await Travel.findById(id);
+    //straight up just updates all values except for ID, since ID's the only one that's certain to remain constant
+    travelDoc.set({
+      id, conference, travelType, origin, destination, departureTime
+    });
+    await travelDoc.save();
+    res.json('ok');
+});
+
+app.delete('/travel/:travelID', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {travelID} = req.params;
+  const result = await Travel.findByIdAndDelete(travelID);
+  res.json('ok');
+});
+
+app.listen(process.env.PORT || 4000);
 
 
