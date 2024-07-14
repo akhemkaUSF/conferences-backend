@@ -419,6 +419,7 @@ app.put('/travels', async (req,res) => {
     console.log("travel type test", travelType);
     const unique_id = departureTime+conferenceID;
     schedule.cancelJob(unique_id);
+    const email = userData.email;
     schedule.scheduleJob(unique_id, departureTime, function() {
       const mailOptions = {
         from: 'soccer.anuj@gmail.com',
