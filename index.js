@@ -373,12 +373,34 @@ app.post('/travels', async (req, res) => {
   const {
     conferenceID, travelType, origin, destination, departureTime
   } = req.body;
+  const userData = await getUserDataFromReq(req);
+  const email = userData.email;
+  
   Travel.create({
     conference: conferenceID, travelType, origin, destination, departureTime
   }).then((doc) => {
     res.json(doc);
   }).catch((err) => {
     throw err;
+  });
+
+  const unique_id = departureTime+conferenceID;
+
+  schedule.scheduleJob(unique_id, departureTime, function() {
+    const mailOptions = {
+      from: 'soccer.anuj@gmail.com',
+      to: email,
+      subject: 'Model UN Conference: Travel Reminder',
+      text: 'Your ' + {travelType} + ' leaves at ' + {departureTime} + 'from ' + {origin} + 'for ' + {destination},
+    };
+    // Send the email
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log('Error:', error);
+      } else {
+        console.log('Email sent:', info.response);
+      }
+    });
   });
 });
 
@@ -394,6 +416,25 @@ app.put('/travels', async (req,res) => {
     });
     await travelDoc.save();
     res.json('ok');
+    const unique_id = departureTime+conferenceID;
+    var my_job = schedule.scheduledJobs[unique_id];
+    my_job.cancel();
+    schedule.scheduleJob(unique_id, departureTime, function() {
+      const mailOptions = {
+        from: 'soccer.anuj@gmail.com',
+        to: email,
+        subject: 'Model UN Conference: Travel Reminder',
+        text: 'Your ' + {travelType} + ' leaves at ' + {departureTime} + 'from ' + {origin} + 'for ' + {destination},
+      };
+      // Send the email
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log('Error:', error);
+        } else {
+          console.log('Email sent:', info.response);
+        }
+      });
+    });
 });
 
 app.get('/travels', async (req,res) => {
