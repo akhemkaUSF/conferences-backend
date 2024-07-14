@@ -391,7 +391,7 @@ app.post('/travels', async (req, res) => {
       from: 'soccer.anuj@gmail.com',
       to: email,
       subject: 'Model UN Conference: Travel Reminder',
-      text: 'Your ' + {travelType} + ' leaves at ' + {departureTime} + 'from ' + {origin} + 'for ' + {destination},
+      text: 'Your ' + travelType + ' leaves at ' + departureTime + 'from ' + origin + 'for ' + destination,
     };
     // Send the email
     transporter.sendMail(mailOptions, function(error, info){
@@ -424,7 +424,7 @@ app.put('/travels', async (req,res) => {
         from: 'soccer.anuj@gmail.com',
         to: email,
         subject: 'Model UN Conference: Travel Reminder',
-        text: 'Your ' + {travelType} + ' leaves at ' + {departureTime} + 'from ' + {origin} + 'for ' + {destination},
+        text: 'Your ' + travelType + ' leaves at ' + departureTime + 'from ' + origin + 'for ' + destination,
       };
       // Send the email
       transporter.sendMail(mailOptions, function(error, info){
