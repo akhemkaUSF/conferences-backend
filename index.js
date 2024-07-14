@@ -416,6 +416,7 @@ app.put('/travels', async (req,res) => {
     });
     await travelDoc.save();
     res.json('ok');
+    console.log("travel type test", travelType);
     const unique_id = departureTime+conferenceID;
     var my_job = schedule.scheduledJobs[unique_id];
     my_job.cancel();
